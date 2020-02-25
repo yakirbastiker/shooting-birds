@@ -1,19 +1,47 @@
+//img
 let aimIMG = new Image;
 let holeIMG = new Image;
 let holeIMGred = new Image;
 let landscapeIMG = new Image;
-let birdIMG = new Image;
+
 aimIMG.src = './img//1.png';
 holeIMG.src = './img/hole.png';
 holeIMGred.src = './img/bullet-holes-red.png';
 landscapeIMG.src = './img/landscape.png';
-birdIMG.src = './img/bird.png';
+//sound gun
+let shootingSound = new Audio("./sound/gun-gunshot-02.mp3");
 
+//var
 let score = 0;
 let holeSec = 2000;
 let holesArr = [];
 let birdsArr = [];
 let birdSize = 100;
+
+//arr image of birds
+let birdImgArr = [];
+
+let birdIMG = new Image;
+birdIMG.src = './img/bird.png';
+
+let birdIMG2 = new Image;
+birdIMG2.src = './img/bird2.png';
+
+let birdIMG3 = new Image;
+birdIMG3.src = './img/bird3.png';
+
+birdImgArr.push(birdIMG);
+birdImgArr.push(birdIMG2);
+birdImgArr.push(birdIMG3);
+
+function  randomBirdImg() {
+    let num = Math.floor(Math.random() * birdImgArr.length);
+    console.log(birdImgArr[num])
+    return birdImgArr[num];
+}
+
+
+
 
 // canvas init
 let canvas = document.querySelector("canvas");
@@ -38,6 +66,7 @@ addEventListener('click', () => {
 
     let hole = new Hole(mouse.x,mouse.y);
     //check if bird is dead
+    shootingSound.play();
     checkShooting(hole);
     holesArr.push(hole);
     
@@ -59,9 +88,10 @@ class Hole {
 
 //bird
 class Bird {
-    constructor(x,y) {
+    constructor(x,y, img) {
         this.x = x;
         this.y = y;
+        this.img = img;
     }
 
     isAlive = true; 
@@ -85,7 +115,7 @@ class Bird {
 }
 
 setInterval(() => {
-    let bird = new Bird(Xrandom(), randomIntFromRange(0, 216));
+    let bird = new Bird( Xrandom(), randomIntFromRange(0, 216), randomBirdImg());
     birdsArr.push(bird); 
 }, 5000);
 
@@ -121,7 +151,7 @@ function animate () {
         for(let b = 0; b < birdsArr.length; b++){
             if(birdsArr[b].isAlive) {
                 birdsArr[b].update();
-                c.drawImage(birdIMG, birdsArr[b].x, birdsArr[b].y,birdSize,birdSize);
+                c.drawImage(birdsArr[b].img, birdsArr[b].x, birdsArr[b].y,birdSize,birdSize);
             }
             
         }
